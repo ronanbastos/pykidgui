@@ -19,8 +19,9 @@ PyKidGUI é uma biblioteca Python que visa facilitar a criação de interfaces g
 Para instalar a biblioteca, basta executar o seguinte comando:
 
 bash
-
+```
 pip install pykidgui
+```
 
 ## Como Usar
 ```
