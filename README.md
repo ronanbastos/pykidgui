@@ -48,11 +48,7 @@ gui.add_image("imagem.png")
 
 E utilizar o método add_scrollbar para adicionar uma barra de rolagem a um frame:
 
-Adicionando um botão
-
 Para adicionar um botão na janela, podemos utilizar o método add_button da classe Gui. Esse método recebe um texto que será exibido no botão e uma função que será executada quando o botão for clicado:
-
-
 
 from pykidgui import Gui
 
@@ -62,6 +58,7 @@ def click_button():
 gui = Gui("Minha janela", "500x500")
 gui.add_button("Clique aqui", click_button)
 
+scrollbar:
 
 frame = gui.add_frame()
 scrollbar = gui.add_scrollbar(frame)
