@@ -1,9 +1,3 @@
-from tkinter import *
-from tkinter import messagebox 
-
-version  = '0.0.9'
-author = 'github@RonanBasto'
-
 """
  _______________________________________________________________________
 | ######  #     # #    #    ###   ######   #####    #     #   ###       | 
@@ -16,149 +10,211 @@ author = 'github@RonanBasto'
 |_______________________________________________________________________|
 
 """
-#[var]
-button=[]
-checkbox=[]
-label=[]
-build_map=[]
-new_on_click= []
-text_title="Pykidgui"
-window_geometry=""
-new_on_click_var = []
-new_on_click_text=[]
-entry=[]
-window_name="window"
-window_destroy=False
-text_title=""
-#[func]
-def new_button(nb):
-    button.append(nb)
-def new_entry(e):
-    entry.append(e)
-    
-def new_label(nl):
-    label.append(nl)
-    
-def new_checkbox(ncb):
-    checkbox.append(ncb)
-    
-def new_on_click(noc):
-   new_on_click_var.append(noc)
+
+version  = '2.0.0'
+author = 'github@RonanBasto'
+
+import tkinter as tk
+from tkinter import *
 
 
-def new_click_text(noct):
-   new_on_click_text.append(noct)
 
+class Gui(tk.Tk):
+    def __init__(self, title, size):
+        super().__init__()
+        self.title(title)
+        self.geometry(size)
+        self.menu_bar = tk.Menu(self)
+        self.config(menu=self.menu_bar)
+        self.widgets = {}
+        self.canvas = Canvas(self)
+        self.canvas.pack(side=LEFT, fill=BOTH, expand=TRUE)
 
-def new_message_erro():
-    messagebox.showerror("Error", "Error") 
+        self.scrollbar = Scrollbar(self, orient=VERTICAL, command=self.canvas.yview)
+        self.scrollbar.pack(side=RIGHT, fill=Y)
 
-def new_message_title(title,msg):
-    root = Tk()
-    root.title(title)
-    msg = Message( root, text = msg)
-    root.geometry("150x150")
-    msg.pack()
-    
-def add_build_map(abm):
-    build_map.append(abm)
+        self.canvas.configure(yscrollcommand=self.scrollbar.set)
+        self.canvas.bind('<Configure>', lambda e: self.canvas.configure(scrollregion=self.canvas.bbox('all')))
 
-def window_name(win):
-    window_name= win
-    button=[]
-    checkbox=[]
-    label=[]
-    build_map=[]
-    new_on_click= []
-    text_title="Pykidgui"
-    window_geometry=""
-    new_on_click_var = []
-    new_on_click_text=[]
-    window_name="window"
-    window_destroy=False
-   
-#[class]    
-class gui(Tk):
-    def __init__(window_name):
-        Tk.__init__(window_name)
+        self.frame = Frame(self.canvas)
+        self.canvas.create_window((0,0), window=self.frame, anchor='nw')
+
+        self.canvas.configure(yscrollcommand=self.scrollbar.set)
+    def add_menu(self, menu_name, menu_items):
+        # Cria um novo menu
+        new_menu = tk.Menu(self.menu_bar, tearoff=0)
+        # Adiciona cada item ao novo menu
+        for item in menu_items:
+            # Verifica se o item é um separador
+            if item == "-":
+                new_menu.add_separator()
+            else:
+                # Extrai o nome e a ação do item
+                item_name, item_action = item
+                # Adiciona o item ao menu com a ação associada
+                new_menu.add_command(label=item_name, command=item_action)
+        # Adiciona o novo menu à barra de menu
+        self.menu_bar.add_cascade(label=menu_name, menu=new_menu)
         
-        if text_title != '':
-                window_name.title(text_title)
-        if window_geometry != '':
-                window_name.geometry(window_geometry)
+    def add_image(self, img_path, **kwargs):
+        img = tk.PhotoImage(file=img_path)
+        img_label = ImageLabel(self, image=img, **kwargs)
+        img_label.image = img
+        img_label.pack()
+        return img_label
+    def add_scrollbar(self):
+        scrollbar = Scrollbar(self.frame, orient=VERTICAL)
+        scrollbar.pack(side=RIGHT, fill=Y)
+        return scrollbar
+    
+    def update_image_position(self):
+        self.place(x=self.x, y=self.y)
         
-         
-        count=-1
-        countclick=-1
-        countlabel=-1
-        countbutton=-1
-        countcheckbox=-1
-        countonclick=-1
-        countonclicktext=-1
-        countentry=-1
-        for x in build_map:
-            count+=1 
-            if "entry" in build_map[count] and len(entry)!= 0:
-                countentry+=1
-                if "entry:LEFT" in build_map[count] or "entry:left" in build_map[count]:
-                    entry[countentry] = Entry() 
-                    entry[countentry].pack(side = LEFT)
-                else:
-                    entry[countentry] = Entry() 
-                    entry[countentry].pack()
-            if "on_click" in build_map[count] and len(new_on_click_var )!= 0 and len(new_on_click_text)!= 0:   
-                       countonclick+=1
-                       countonclicktext+=1
-                       Button(text=new_on_click_text[countonclicktext],command =new_on_click_var[countonclick]).pack()  
-                      
-            if "label" in build_map[count] and len(label)!= 0:
-                     countlabel+=1   
-                     if "label:LEFT" in build_map[count] or "label:left" in build_map[count]:   
-                         labelleft = label[countlabel]  
-                         window_name.comp = Label(text =labelleft[:6])               
-                         window_name.comp.pack(side = LEFT)
-                     else:
-                         window_name.comp = Label(text =label[countlabel])               
-                         window_name.comp.pack()    
-            if "checkbox" in build_map[count] and len(checkbox)!= 0:
-                    countcheckbox+=1
-                    
-                    if "checkbox:LEFT" in build_map[count] or "checkbox:left" in build_map[count]:
-                            Checkbox   = IntVar()
-                            checkleft  =checkbox[countcheckbox]
-                            window_name.comp=Checkbutton(text = checkleft[:8],  
-                                  variable = Checkbox, 
-                                  onvalue = 1, 
-                                  offvalue = 0, 
-                                  height = 5, 
-                                  width = 10)
-                            window_name.comp.pack(side = LEFT) 
-                              
-                             
-                    else:
-                        Checkbox = IntVar()
-                        window_name.comp=Checkbutton(text = checkbox[countcheckbox],  
-                          variable = Checkbox, 
-                          onvalue = 1, 
-                          offvalue = 0, 
-                          height = 5, 
-                          width = 10)
-                      
-                        window_name.comp.pack()  
-                      
-            if "button" in build_map[count] and len(button)!= 0:    
-                     countbutton+=1
-                     if "button:LEFT" in build_map[count] or "button:left" in build_map[count]:
-                         buttonLEFT=button[countbutton]   
-                         window_name.comp = Button(text=buttonLEFT[:6])
-                         window_name.comp.pack(side = RIGHT)
+    def open_file_dialog(self, file_types):
+                        file = filedialog.askopenfile(mode="r", filetypes=file_types)
+                        if file:
+                            return file.name
+        
+    def add_spinbox(self, label, from_, to, callback):
+        var = tk.StringVar()
+        spinbox = tk.Spinbox(self, from_=from_, to=to, textvariable=var, command=callback)
+        spinbox.pack()
+        label_widget = tk.Label(self, text=label)
+        label_widget.pack()
 
-                     elif button[countbutton] == "sair" or button[countbutton] == "Sair":
-                             window_name.comp = Button(text=button[countbutton],command=window_name.destroy)
-                             window_name.comp.pack()
-                     
-                     else:  
-                             window_name.comp = Button(text=button[countbutton])
-                             window_name.comp.pack()
-           
-                 
+    def add_checkbox(self, text, callback):
+        var = tk.BooleanVar()
+        checkbox = tk.Checkbutton(self, text=text, variable=var, command=lambda: callback(var.get()))
+        checkbox.pack()
+        
+    def add_text(self, text_name, prompt=""):
+        text_var = tk.StringVar()
+        new_text = tk.Entry(self, textvariable=text_var)
+        new_text.pack()
+        self.widgets[text_name] = new_text, text_var
+        return text_var
+
+    def add_button(self, button_name, on_click, text=""):
+        new_button = tk.Button(self, text=text, command=lambda: self.new_on_click(button_name, on_click))
+        new_button.pack()
+        self.widgets[button_name] = new_button
+
+
+    def add_listbox(self, listbox_name, items):
+        new_listbox = tk.Listbox(self)
+        for item in items:
+            new_listbox.insert(tk.END, item)
+        new_listbox.pack()
+        self.widgets[listbox_name] = new_listbox
+
+    def add_text_area(self, text_area_name):
+        text_area = tk.Text(self)
+        text_area.pack()
+        self.widgets[text_area_name] = text_area
+        return text_area
+        
+    def add_canvas(self, canvas_name, width, height):
+        new_canvas = tk.Canvas(self, width=width, height=height)
+        new_canvas.pack()
+        self.widgets[canvas_name] = new_canvas
+        return new_canvas
+
+    def add_canvas_items(self, canvas_name, maps):
+        canvas = self.widgets[canvas_name]
+        for m in maps:
+            shape = m['shape']
+            coords = m['coords']
+            fill = m.get('fill', '')
+            outline = m.get('outline', '')
+            width = m.get('width', 1)
+            tags = m.get('tags', '')
+            if shape == 'rectangle':
+                canvas.create_rectangle(coords, fill=fill, outline=outline, width=width, tags=tags)
+            elif shape == 'oval':
+                canvas.create_oval(coords, fill=fill, outline=outline, width=width, tags=tags)
+            elif shape == 'line':
+                canvas.create_line(coords, fill=fill, width=width, tags=tags)
+            elif shape == 'polygon':
+                canvas.create_polygon(coords, fill=fill, outline=outline, width=width, tags=tags)
+
+    def update_canvas_items(self, canvas_name, maps):
+        canvas = self.widgets[canvas_name]
+        canvas.delete('all')
+        self.add_canvas_items(canvas_name, maps)
+
+    def clear_canvas(self, canvas_name):
+        canvas = self.widgets[canvas_name]
+        canvas.delete('all')
+
+    def new_on_click(self, button_name, on_click):
+        if isinstance(self.widgets[button_name], tuple):
+            _, text_var = self.widgets[button_name]
+            on_click(text_var.get())
+        elif isinstance(self.widgets[button_name], tk.Listbox):
+            selected_index = self.widgets[button_name].curselection()
+            on_click(selected_index)
+        else:
+            on_click()
+            
+    def add_entry(self, entry_name):
+        entry = tk.Entry(self)
+        entry.pack()
+        return entry
+        
+    def get_entry_value(self, entry):
+        return entry.get()
+
+    def add_label(self, text):
+        label = Label(self.frame, text=text)
+        label.pack()
+    
+class Canvas_Map(tk.Canvas):
+    def __init__(self, master, map_data, cell_size=50):
+        super().__init__(master, width=len(map_data[0]) * cell_size, height=len(map_data) * cell_size)
+        self.map_data = map_data
+        self.cell_size = cell_size
+        self.cells = []
+        self.draw_map()
+
+    def draw_map(self):
+        for y, row in enumerate(self.map_data):
+            for x, value in enumerate(row):
+                x1, y1 = x * self.cell_size, y * self.cell_size
+                x2, y2 = x1 + self.cell_size, y1 + self.cell_size
+                cell = self.create_rectangle(x1, y1, x2, y2, fill=value)
+                self.cells.append(cell)
+
+
+class GUI_FRAME:
+    def __init__(self, title, geometry):
+        self.root = tk.Tk()
+        self.root.title(title)
+        self.root.geometry(geometry)
+        self.frames = {}
+
+    def add_frame(self, frame_name, **kwargs):
+        frame = tk.Frame(self.root, **kwargs)
+        self.frames[frame_name] = frame
+        frame.pack()
+
+    def run(self):
+        self.root.mainloop()
+
+class ImageLabel(tk.Label):
+    def __init__(self, master=None, **kwargs):
+        super().__init__(master, **kwargs)
+        self.image = None
+        self.x = 0
+        self.y = 0
+
+    def set_image(self, img_path):
+        self.image = tk.PhotoImage(file=img_path)
+        self.config(image=self.image)
+
+    def update_position(self):
+        self.place(x=self.x, y=self.y)
+
+    def set_position(self, x, y):
+        self.x = x
+        self.y = y
+        self.update_position()
