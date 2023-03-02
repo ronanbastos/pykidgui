@@ -8,8 +8,8 @@ def on_click(button_name, text):
 
 my_gui = Gui("Janela")
 my_gui.add_label("label1", "Digite algo abaixo:")
-my_gui.add_button("button1", "OK 1", on_click)
-my_gui.add_button("button2", "OK 2", on_click)
+my_gui.add_button("button1",  on_click , "ok 1")
+my_gui.add_button("button2", on_click , "OK 2")
 
 my_gui.mainloop()
 '''
