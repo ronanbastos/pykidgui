@@ -20,10 +20,12 @@ from tkinter import *
 
 
 class Gui(tk.Tk):
-    def __init__(self, title, size):
+     def __init__(self, title="PyKidGUI", geometry="800x600", icon_path=None):
         super().__init__()
         self.title(title)
-        self.geometry(size)
+        self.geometry(geometry)
+        if icon_path:
+            self.iconphoto(True, tk.PhotoImage(file=icon_path))
         self.menu_bar = tk.Menu(self)
         self.config(menu=self.menu_bar)
         self.widgets = {}
@@ -94,12 +96,16 @@ class Gui(tk.Tk):
         self.widgets[text_name] = new_text, text_var
         return text_var
 
-    def add_button(self, button_name, on_click, text=""):
+    def add_button(self, button_name: str, on_click: Callable[[], None], text: Optional[str] = "") -> None:
         new_button = tk.Button(self, text=text, command=lambda: self.new_on_click(button_name, on_click))
         new_button.pack()
         self.widgets[button_name] = new_button
 
-
+    def handle_button_click(self, button_name, on_click):
+        try:
+            on_click()
+        except TypeError:
+            exec(on_click)
     def add_listbox(self, listbox_name, items):
         new_listbox = tk.Listbox(self)
         for item in items:
@@ -118,7 +124,12 @@ class Gui(tk.Tk):
         new_canvas.pack()
         self.widgets[canvas_name] = new_canvas
         return new_canvas
-
+    def add_progress_bar(self, progress_bar_name, row=0, column=0):
+        new_progress_bar = tk.Progressbar(self, orient=tk.HORIZONTAL, length=100, mode='determinate')
+        new_progress_bar.grid(row=row, column=column)
+        self.widgets[progress_bar_name] = new_progress_bar
+        return new_progress_bar
+    
     def add_canvas_items(self, canvas_name, maps):
         canvas = self.widgets[canvas_name]
         for m in maps:
