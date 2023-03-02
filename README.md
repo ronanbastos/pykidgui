@@ -81,5 +81,5 @@ PyKidGUI é distribuída sob a licença MIT. Veja o arquivo LICENSE para mais in
 
 Mencione todos aqueles que ajudaram a levantar o projeto desde o seu início
 
-* **Um desenvolvedor** - *Trabalho Inicial* - [umdesenvolvedor](https://gist.github.com/ronanbastos)
-* **help codificação*** - *Trabalho segundario* [umdesenvolvedor](https://chat.openai.com)
+* **Um desenvolvedor** - *Trabalho Inicial* - [ronanbastos](https://gist.github.com/ronanbastos)
+* **help codificação*** - *Trabalho segundario* [chat.openai.com](https://chat.openai.com)
